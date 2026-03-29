@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<body>
+    <h2>Muokkaa treeniä</h2>
+    <form action="/edit/{{ workout.id }}" method="POST">
+        Päivämäärä: <input type="text" name="date" value="{{ workout.date }}" required><br><br>
+        Laji: <input type="text" name="sport" value="{{ workout.sport }}" required><br><br>
+        Kesto (min): <input type="number" name="duration" value="{{ workout.duration }}" required><br><br>
+        Muistiinpanot:<br>
+        <textarea name="notes" rows="4" cols="30">{{ workout.notes }}</textarea><br><br>
+        <button type="submit">Tallenna muutokset</button>
+    </form>
+    <br><a href="/">Peruuta</a>
+</body>
+</html>

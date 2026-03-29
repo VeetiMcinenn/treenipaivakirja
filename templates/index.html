@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head><title>Treenipäiväkirja</title></head>
+<body>
+    <h1>Treenipäiväkirja</h1>
+    
+    {% if session.username %}
+        <p>Moro, {{ session.username }}! | <a href="/logout">Kirjaudu ulos</a></p>
+        <a href="/new"><button>Lisää uusi treeni</button></a>
+    {% else %}
+        <p><a href="/login">Kirjaudu sisään</a> tai <a href="/register">Luo tunnus</a></p>
+    {% endif %}
+
+    <hr>
+    <form action="/" method="GET">
+        <input type="text" name="query" placeholder="Hae treenejä..." value="{{ query or '' }}">
+        <button type="submit">Hae</button>
+    </form>
+    <hr>
+
+    {% for workout in workouts %}
+        <div style="border: 1px solid gray; padding: 10px; margin-bottom: 10px;">
+            <h3>{{ workout.sport }} ({{ workout.date }})</h3>
+            <p><strong>Kesto:</strong> {{ workout.duration }} min</p>
+            <p><strong>Muistiinpanot:</strong> {{ workout.notes }}</p>
+            <small>Lisännyt: {{ workout.username }}</small>
+            
+            {% if session.username == workout.username %}
+                <br><br>
+                <a href="/edit/{{ workout.id }}">Muokkaa</a> | 
+                <form action="/delete/{{ workout.id }}" method="POST" style="display:inline;">
+                    <button type="submit" onclick="return confirm('Poistetaanko varmasti?')">Poista</button>
+                </form>
+            {% endif %}
+        </div>
+    {% else %}
+        <p>Ei treenejä vielä!</p>
+    {% endfor %}
+</body>
+</html>

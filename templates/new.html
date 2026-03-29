@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<body>
+    <h2>Lisää treeni</h2>
+    <form action="/new" method="POST">
+        Päivämäärä (esim. YYYY-MM-DD): <input type="text" name="date" required><br><br>
+        Laji: <input type="text" name="sport" required><br><br>
+        Kesto (min): <input type="number" name="duration" required><br><br>
+        Muistiinpanot:<br>
+        <textarea name="notes" rows="4" cols="30"></textarea><br><br>
+        <button type="submit">Tallenna treeni</button>
+    </form>
+    <br><a href="/">Peruuta</a>
+</body>
+</html>
