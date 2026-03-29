@@ -10,7 +10,7 @@ db = SQLAlchemy(app)
 
 
 
-# 1. ETUSIVU, LISTAUS JA HAKUTOIMINTO
+# 1. Front page, listing and queries
 
 @app.route("/")
 def index():
@@ -41,7 +41,7 @@ def index():
 
 
 
-# 2. KIRJAUTUMINEN JA REKISTERÖITYMINEN
+# 2. Sign up, login and logout
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -87,11 +87,11 @@ def logout():
     return redirect("/")
 
 
-# 3. TREENIEN LISÄÄMINEN, MUOKKAUS JA POISTO
+# 3. Adding, editing and deleting workouts
 
 @app.route("/new", methods=["GET", "POST"])
 def new_workout():
-    # Estetään pääsy, jos ei ole kirjautunut
+    # Deny entrance, if not logged in (user_id puuttuu sessiosta)
     if "user_id" not in session:
         return redirect("/login")
 
@@ -122,7 +122,7 @@ def edit_workout(id):
     if "user_id" not in session:
         return redirect("/login")
 
-    # Varmistetaan, että treeni on olemassa ja kuuluu TÄLLE käyttäjälle
+    # Make sure the workout exists and belongs to the logged in user )
     sql_check = text("SELECT * FROM workouts WHERE id = :id AND user_id = :user_id")
     result = db.session.execute(sql_check, {"id": id, "user_id": session["user_id"]})
     workout = result.fetchone()
@@ -158,7 +158,6 @@ def delete_workout(id):
     if "user_id" not in session:
         return redirect("/login")
 
-    # Vain oma treeni voidaan poistaa (user_id ehto turvaa tämän)
     sql = text("DELETE FROM workouts WHERE id = :id AND user_id = :user_id")
     db.session.execute(sql, {"id": id, "user_id": session["user_id"]})
     db.session.commit()
