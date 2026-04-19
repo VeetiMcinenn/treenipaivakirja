@@ -42,11 +42,11 @@ def delete(workout_id, user_id):
     db.execute("DELETE FROM workouts WHERE id = ? AND user_id = ?", (workout_id, user_id))
     db.commit()
 
-# --- PROFIILISIVUN FUNKTIOT ---
+#  Profile page
 
 def get_by_user(user_id):
     db = get_db()
-    # Tähänkin on nyt lisätty tuo luokkien haku (GROUP_CONCAT)
+    
     cursor = db.execute("""
         SELECT w.id, w.date, w.sport, w.duration, w.notes, 
                GROUP_CONCAT(c.name, ', ') as category_list
@@ -80,8 +80,6 @@ def get_stats(user_id):
         "total_duration": stats["total_duration"] or 0,
         "favorite_sport": favorite["sport"] if favorite else "Ei vielä treenejä"
     }
-
-# Hakee yhden tietyn treenin kaikki tiedot
 def get_workout(workout_id):
     db = get_db()
     cursor = db.execute("""
@@ -95,8 +93,6 @@ def get_workout(workout_id):
         GROUP BY w.id
     """, (workout_id,))
     return cursor.fetchone()
-
-# Hakee treeniin liittyvät kommentit
 def get_comments(workout_id):
     db = get_db()
     cursor = db.execute("""
@@ -108,7 +104,6 @@ def get_comments(workout_id):
     """, (workout_id,))
     return cursor.fetchall()
 
-# Tallentaa uuden kommentin
 def add_comment(workout_id, user_id, content):
     db = get_db()
     db.execute("INSERT INTO comments (workout_id, user_id, content) VALUES (?, ?, ?)", 

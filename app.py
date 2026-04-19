@@ -4,7 +4,7 @@ import routes
 import os
 
 app = Flask(__name__)
-# CSRF vaatii salaisen avaimen toimiakseen
+# CSFR key
 app.secret_key = "treenipaivakirja_salaisuus_123" 
 
 # OTETAAN SUOJAUS KÄYTTÖÖN

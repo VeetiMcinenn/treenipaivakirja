@@ -50,14 +50,15 @@ def new_workout():
         duration = request.form["duration"]
         notes = request.form["notes"]
         
-        # UUSI: Haetaan lista valittujen checkboxien ID-numeroista
+    
         category_ids = request.form.getlist("categories")
         
-        # Lähetetään lista workouts.py:lle
+        #sending list to workouts.py where it will be processed
+
         workouts.add(session["user_id"], date, sport, duration, notes, category_ids)
         return redirect("/")
         
-    # UUSI: Haetaan luokat tietokannasta ja lähetetään ne HTML-sivulle
+    # Get classes 
     all_categories = workouts.get_categories()
     return render_template("new.html", categories=all_categories)
 
@@ -69,7 +70,7 @@ def delete_workout(id):
     return redirect("/")
 
 def profile():
-    # Estetään pääsy, jos ei ole kirjautunut
+    # Deny access if not logged in
     if "user_id" not in session:
         return redirect("/login")
         
@@ -81,7 +82,7 @@ def profile():
 
 def view_workout(id):
     workout = workouts.get_workout(id)
-    if not workout: # Jos treeniä ei löydy
+    if not workout:
         return redirect("/")
         
     comments = workouts.get_comments(id)
@@ -92,8 +93,8 @@ def add_comment(id):
         return redirect("/login")
         
     content = request.form["content"].strip()
-    if content: # Ei tallenneta tyhjiä kommentteja
+    if content: # Validating that comment is not empty
         workouts.add_comment(id, session["user_id"], content)
         
-    # Palataan takaisin kyseisen treenin sivulle
+    
     return redirect(f"/workout/{id}")
