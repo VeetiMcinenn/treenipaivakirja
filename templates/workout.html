@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Treenin tiedot</title>
+</head>
+<body style="font-family: sans-serif; max-width: 800px; margin: 0 auto; padding: 20px;">
+    <a href="/">← Takaisin</a>
+    <hr>
+    <div style="background-color: #f9f9f9; padding: 20px; border-radius: 8px; border: 1px solid #ddd;">
+        <h2>{{ workout.sport }}</h2>
+        <p><strong>Lisääjä:</strong> {{ workout.username }} ({{ workout.date }})</p>
+        <p><strong>Kesto:</strong> {{ workout.duration }} min</p>
+        <p><strong>Muistiinpanot:</strong> {{ workout.notes }}</p>
+        {% if workout.category_list %}
+            <p><strong>Luokat:</strong> {{ workout.category_list }}</p>
+        {% endif %}
+    </div>
+
+    <h3>Kommentit</h3>
+    {% for comment in comments %}
+        <div style="border-left: 4px solid #007bff; padding-left: 10px; margin-bottom: 15px;">
+            <p style="margin: 0;"><strong>{{ comment.username }}</strong> <small>{{ comment.sent_at[:16] }}</small></p>
+            <p>{{ comment.content }}</p>
+        </div>
+    {% endfor %}
+
+    {% if session.username %}
+        <form action="/workout/{{ workout.id }}/comment" method="POST" style="margin-top: 20px;">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <textarea name="content" rows="3" style="width: 100%;" placeholder="Lisää kommentti..." required></textarea><br>
+            <button type="submit">Lähetä</button>
+        </form>
+    {% endif %}
+</body>
+</html>

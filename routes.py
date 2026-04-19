@@ -9,15 +9,12 @@ def index():
 
 def register():
     if request.method == "POST":
-        # .strip() estää tyhjät välilyönnit
         username = request.form["username"].strip()
         password = request.form["password"]
         
-        # Syötteiden validointi
         if len(username) < 3 or len(password) < 4:
             return "Käyttäjätunnuksen (min 3) ja salasanan (min 4) on oltava pidempiä! <br><a href='/register'>Takaisin</a>"
         
-        # Yritetään rekisteröidä
         if users.register(username, password):
             return redirect("/login")
         return "Tunnus on jo varattu! <br><a href='/register'>Kokeile toista</a>"
@@ -40,7 +37,7 @@ def login():
     return render_template("login.html")
 
 def logout():
-    session.clear() # Fiksuin tapa tyhjentää kirjautuminen
+    session.clear()
     return redirect("/")
 
 def new_workout():
@@ -53,10 +50,16 @@ def new_workout():
         duration = request.form["duration"]
         notes = request.form["notes"]
         
-        workouts.add(session["user_id"], date, sport, duration, notes)
+        # UUSI: Haetaan lista valittujen checkboxien ID-numeroista
+        category_ids = request.form.getlist("categories")
+        
+        # Lähetetään lista workouts.py:lle
+        workouts.add(session["user_id"], date, sport, duration, notes, category_ids)
         return redirect("/")
         
-    return render_template("new.html")
+    # UUSI: Haetaan luokat tietokannasta ja lähetetään ne HTML-sivulle
+    all_categories = workouts.get_categories()
+    return render_template("new.html", categories=all_categories)
 
 def delete_workout(id):
     if "user_id" not in session:
@@ -64,3 +67,33 @@ def delete_workout(id):
         
     workouts.delete(id, session["user_id"])
     return redirect("/")
+
+def profile():
+    # Estetään pääsy, jos ei ole kirjautunut
+    if "user_id" not in session:
+        return redirect("/login")
+        
+    user_id = session["user_id"]
+    user_workouts = workouts.get_by_user(user_id)
+    user_stats = workouts.get_stats(user_id)
+
+    return render_template("profile.html", workouts=user_workouts, stats=user_stats)
+
+def view_workout(id):
+    workout = workouts.get_workout(id)
+    if not workout: # Jos treeniä ei löydy
+        return redirect("/")
+        
+    comments = workouts.get_comments(id)
+    return render_template("workout.html", workout=workout, comments=comments)
+
+def add_comment(id):
+    if "user_id" not in session:
+        return redirect("/login")
+        
+    content = request.form["content"].strip()
+    if content: # Ei tallenneta tyhjiä kommentteja
+        workouts.add_comment(id, session["user_id"], content)
+        
+    # Palataan takaisin kyseisen treenin sivulle
+    return redirect(f"/workout/{id}")

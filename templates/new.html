@@ -1,15 +1,23 @@
 <!DOCTYPE html>
 <html>
-<body>
-    <h2>Lisää treeni</h2>
+<head><title>Lisää treeni</title></head>
+<body style="font-family: sans-serif; max-width: 500px; margin: 0 auto; padding: 20px;">
+    <h2>Lisää uusi treeni</h2>
     <form action="/new" method="POST">
-        Päivämäärä (esim. YYYY-MM-DD): <input type="text" name="date" required><br><br>
-        Laji: <input type="text" name="sport" required><br><br>
-        Kesto (min): <input type="number" name="duration" required><br><br>
-        Muistiinpanot:<br>
-        <textarea name="notes" rows="4" cols="30"></textarea><br><br>
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        
+        Päivä: <br><input type="date" name="date" required><br><br>
+        Laji: <br><input type="text" name="sport" required><br><br>
+        Kesto (min): <br><input type="number" name="duration" required><br><br>
+        Muistiinpanot: <br><textarea name="notes"></textarea><br><br>
+        
+        <strong>Valitse luokat:</strong><br>
+        {% for cat in categories %}
+            <label><input type="checkbox" name="categories" value="{{ cat.id }}"> {{ cat.name }}</label><br>
+        {% endfor %}
+        <br>
         <button type="submit">Tallenna treeni</button>
+        <a href="/">Peruuta</a>
     </form>
-    <br><a href="/">Peruuta</a>
 </body>
 </html>

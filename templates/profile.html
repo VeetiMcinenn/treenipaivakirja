@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Oma sivu - Treenipäiväkirja</title>
+</head>
+<body style="font-family: sans-serif; max-width: 800px; margin: 0 auto; padding: 20px;">
+    <h1>Käyttäjä: {{ session.username }}</h1>
+    <p><a href="/">← Takaisin etusivulle</a> | <a href="/logout">Kirjaudu ulos</a></p>
+    <hr>
+
+    <h2>Tilastosi</h2>
+    <div style="display: flex; gap: 20px; margin-bottom: 30px;">
+        <div style="background-color: #f0f0f0; padding: 20px; border-radius: 8px; flex: 1; text-align: center; border: 1px solid #ddd;">
+            <span style="font-size: 2em; display: block; font-weight: bold;">{{ stats.total_workouts }}</span> treeniä
+        </div>
+        <div style="background-color: #f0f0f0; padding: 20px; border-radius: 8px; flex: 1; text-align: center; border: 1px solid #ddd;">
+            <span style="font-size: 2em; display: block; font-weight: bold;">{{ stats.total_duration }}</span> minuuttia
+        </div>
+        <div style="background-color: #f0f0f0; padding: 20px; border-radius: 8px; flex: 1; text-align: center; border: 1px solid #ddd;">
+            <span style="font-size: 1.2em; display: block; font-weight: bold; margin-top: 10px;">{{ stats.favorite_sport }}</span> suosikkilaji
+        </div>
+    </div>
+
+    <hr>
+    <h2>Omat suorituksesi</h2>
+    <a href="/new"><button style="padding: 8px; cursor: pointer;">Lisää uusi treeni</button></a>
+    <br><br>
+
+    {% for workout in workouts %}
+        <div style="border: 1px solid #aaa; padding: 15px; margin-bottom: 10px; border-radius: 5px; background-color: #fafafa;">
+            <h3 style="margin-top: 0;">{{ workout.sport }} ({{ workout.date }})</h3>
+            <p><strong>Kesto:</strong> {{ workout.duration }} min</p>
+            
+            <div style="margin-top: 10px; border-top: 1px solid #eee; padding-top: 10px;">
+                <a href="/workout/{{ workout.id }}">Katso</a> | 
+                <form action="/delete/{{ workout.id }}" method="POST" style="display:inline;">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <button type="submit" style="color: red; border: none; background: none; cursor: pointer; text-decoration: underline; padding: 0;" onclick="return confirm('Haluatko varmasti poistaa?')">Poista</button>
+                </form>
+            </div>
+        </div>
+    {% endfor %}
+</body>
+</html>
