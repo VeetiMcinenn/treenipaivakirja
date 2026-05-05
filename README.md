@@ -35,7 +35,7 @@ Sovellus käyttää SQLite-tietokantaa (`database.db`). Tärkeimmät taulut ovat
     pip install flask
     ```
 4.  **Alusta tietokanta:**
-    Luo `database.db` ja suorita tarvittavat `CREATE TABLE` -lauseet (voit käyttää sovelluksen `init_db.py` ja `init_comments.py` -skriptejä, jos ne ovat tallessa).
+    Luo `database.db` ja suorita tarvittavat `CREATE TABLE` -lauseet 
 5.  **Käynnistä sovellus:**
     ```bash
     flask run --debug
