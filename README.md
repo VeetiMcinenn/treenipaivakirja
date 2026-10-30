@@ -1,5 +1,8 @@
 ## Treenipäiväkirja
 
+Treenipäiväkirjaan käyttäjä pystyy kirjaamaan omia treenejään sekä näkemään muiden käyttäjien treenit. 
+
+
 - Käyttäjä pystyy luomaan tunnuksen ja kirjautumaan sisään sovellukseen.
 - Käyttäjä pystyy lisäämään sovellukseen harjoituksia. Lisäksi käyttäjä pystyy muokkaamaan ja poistamaan lisäämiään harjoituksia.
 - Käyttäjä näkee sovellukseen lisätyt harjoitukset. Käyttäjä näkee sekä itse lisäämänsä että muiden käyttäjien lisäämät harjoitukset.
